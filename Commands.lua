@@ -45,6 +45,42 @@ function HandleJailCommand( Split, Player )
 end
 end
 
+function HandleUnJailCommand( Split, Player )
+	local UsersIni = cIniFile("users.ini")
+
+	if UsersIni:ReadFile() == false then
+		LOG( "Could not read users.ini!" )
+	end
+
+	if #Split < 2 then
+            Player:SendMessage('Usage:/jail [player] [jail]')
+            return true
+      end
+
+      UnJailed = false
+      local JailPlayer = function(OtherPlayer)
+		if (OtherPlayer:GetName() == Split[2]) then
+                World = OtherPlayer:GetWorld()
+	          OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
+	          OtherPlayer:SendMessage(cChatColor.Green .. 'You have been unjailed')
+                UsersIni:DeleteValue(OtherPlayer:GetName(),   "Jailed")
+                UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+                UsersIni:WriteFile()
+                UnJailed = true
+	          return true
+
+		 end
+	end
+      cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
+	if (UnJailed) then
+          Player:SendMessage("You unjailed "..Split[2])
+          return true
+      else
+          Player:SendMessage(cChatColor.Red .. "Player not found")
+          return true
+end
+end
+
 function HandleSetJailCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 	local World = Player:GetWorld():GetName()
@@ -83,8 +119,10 @@ function HandleSetJailCommand( Split, Player)
 		jailsINI:WriteFile();
 	
 		Player:SendMessage("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
+            return true
 	else
 		Player:SendMessage(cChatColor.Red .. 'Warp "' .. Tag .. '" already exist')
+            return true
 	end
 return true
 end
