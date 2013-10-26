@@ -18,12 +18,12 @@ function Initialize(Plugin)
 	
 
 	local settingsINI = cIniFile( Plugin:GetLocalDirectory() .. "/settings.ini" )
-      settingsINI:ReadFile()
+      settingsINI:ReadFile(settings.ini)
       IsChatEnabled = settingsINI:GetValueSet("Enabled", "Chat", "true")
       AreCommandEnabled = settingsINI:GetValueSet("Enabled", "Commands", "false")
       IsDiggingEnabled = settingsINI:GetValueSet("Enabled", "Dig", "true")
       IsPlaceEnabled = settingsINI:GetValueSet("Enabled", "Place", "true")
-      settingsINI:WriteFile()
+      settingsINI:WriteFile(settings.ini)
 	local jailsINI = cIniFile("jails.ini")
 	if ( jailsINI:ReadFile() == true ) then
 		jailNum = jailsINI:GetNumKeys();
