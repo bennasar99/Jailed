@@ -1,6 +1,6 @@
 function HandleJailCommand( Split, Player )
 	local UsersIni = cIniFile("users.ini")
-	if UsersIni:ReadFile() == false then
+	if UsersIni:ReadFile(users.ini) == false then
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 and #Split < 3 then
@@ -26,7 +26,7 @@ function HandleJailCommand( Split, Player )
 	          OtherPlayer:SendMessage(cChatColor.Red .. 'You have been jailed')
                 UsersIni:DeleteValue(OtherPlayer:GetName(),   "Jailed")
                 UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-                UsersIni:WriteFile()
+                UsersIni:WriteFile(users.ini)
                 Jailed = true
 	          return true
 
@@ -48,7 +48,7 @@ end
 function HandleUnJailCommand( Split, Player )
 	local UsersIni = cIniFile("users.ini")
 
-	if UsersIni:ReadFile() == false then
+	if UsersIni:ReadFile(users.ini) == false then
 		LOG( "Could not read users.ini!" )
 	end
 
@@ -65,7 +65,7 @@ function HandleUnJailCommand( Split, Player )
 	          OtherPlayer:SendMessage(cChatColor.Green .. 'You have been unjailed')
                 UsersIni:DeleteValue(OtherPlayer:GetName(),   "Jailed")
                 UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-                UsersIni:WriteFile()
+                UsersIni:WriteFile(users.ini)
                 UnJailed = true
 	          return true
 
@@ -99,7 +99,7 @@ function HandleSetJailCommand( Split, Player)
 	end
 	
 	local jailsINI = cIniFile("jails.ini")
-	jailsINI:ReadFile()
+	jailsINI:ReadFile(jails.ini)
 	
 	if (jailsINI:FindKey(Tag)<0) then
 	jails[Tag]["w"] = World
@@ -116,7 +116,7 @@ function HandleSetJailCommand( Split, Player)
 		jailsINI:SetValue( Tag , "x" , pX)
 		jailsINI:SetValue( Tag , "y" , pY)
 		jailsINI:SetValue( Tag , "z" , pZ)
-		jailsINI:WriteFile();
+		jailsINI:WriteFile(jails.ini);
 	
 		Player:SendMessage("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
             return true
@@ -138,11 +138,11 @@ function HandleDelJailCommand( Split, Player)
 	jails[Tag] = nil
 	
 	local jailsINI = cIniFile("jails.ini")
-	jailsINI:ReadFile()
+	JailsIni:ReadFile(jails.ini)
 	
 	if (jailsINI:FindKey(Tag)>-1) then
 		jailsINI:DeleteKey(Tag);
-		jailsINI:WriteFile();
+		jailsINI:WriteFile(jails.ini);
 	else
 		Player:SendMessage(cChatColor.Red .. "Jail \"" .. Tag .. "\" was not found.")
 		return true
