@@ -16,16 +16,10 @@ function Initialize(Plugin)
 	PluginManager:BindCommand("/deljail",            "jail.deljail",            HandleDelJailCommand,        	  " - Deletes a jail.");
 	PluginManager:BindCommand("/jails",         	 "jail.listjail",           HandleListJailCommand,            " - Lists all jails.");
 	
-
-	local settingsINI = cIniFile( Plugin:GetLocalDirectory() .. "/settings.ini" )
-      settingsINI:ReadFile(settings.ini)
-      IsChatEnabled = settingsINI:GetValueSet("Enabled", "Chat", "true")
-      AreCommandEnabled = settingsINI:GetValueSet("Enabled", "Commands", "false")
-      IsDiggingEnabled = settingsINI:GetValueSet("Enabled", "Dig", "true")
-      IsPlaceEnabled = settingsINI:GetValueSet("Enabled", "Place", "true")
-      settingsINI:WriteFile(settings.ini)
-	local jailsINI = cIniFile("jails.ini")
-	if ( jailsINI:ReadFile() == true ) then
+	localdir = Plugin:GetLocalDirectory()
+    
+	local jailsINI = cIniFile()
+	if ( jailsINI:ReadFile("jails.ini") == true ) then
 		jailNum = jailsINI:GetNumKeys();
 		for i=0, jailNum do
 			local Tag = jailsINI:GetKeyName(i)
@@ -36,6 +30,8 @@ function Initialize(Plugin)
 			jails[Tag]["z"] = jailsINI:GetValueI( Tag , "z")
 		end
       end
+    UsersIni = cIniFile()
+    UsersIni:ReadFile("users.ini")
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
 end
